@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useDynamicHeights } from "@/hooks/useDynamicHeights";
 import type { VirtualizedListProps } from "@/types";
 
 export function VirtualizedList<T>(props: VirtualizedListProps<T>) {
@@ -13,35 +14,36 @@ export function VirtualizedList<T>(props: VirtualizedListProps<T>) {
 		onEndReached,
 		onEndReachedThreshold = 100,
 	} = props;
+	const { getTotalHeight, getStartIndex, updateItemHeight, getOffsetTop } = useDynamicHeights(
+		itemHeight,
+		data.length
+	);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [scrollTop, setScrollTop] = useState(0);
 	const [containerHeight, setContainerHeight] = useState(0);
 	const lastNotifiedDataLength = useRef(0);
 
-	useEffect(()=>{
+	useEffect(() => {
 		const containerElement = containerRef.current;
-    if (!containerElement) return;
+		if (!containerElement) return;
 		const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerHeight(entry.contentRect.height);
-      }
-    });
+			for (const entry of entries) {
+				setContainerHeight(entry.contentRect.height);
+			}
+		});
 		observer.observe(containerElement);
 
 		return () => {
-      observer.disconnect();
-    };
-	}, [])
+			observer.disconnect();
+		};
+	}, []);
 
 	const dataLength = data.length;
-	const totalHeight = dataLength * itemHeight;
+	const totalHeight = getTotalHeight();
 
-	const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-	const endIndex = Math.min(
-		dataLength - 1,
-		Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan
-	);
-	const offsetY = startIndex * itemHeight;
+	const startIndex = Math.max(0, getStartIndex(scrollTop) - overscan);
+	const endIndex = Math.min(dataLength - 1, getStartIndex(scrollTop + containerHeight) + overscan);
+	const offsetY = getOffsetTop(startIndex);
 	const visibleData = data.slice(startIndex, endIndex + 1);
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 		setScrollTop(e.currentTarget.scrollTop);
@@ -80,7 +82,15 @@ export function VirtualizedList<T>(props: VirtualizedListProps<T>) {
 				{visibleData.map((item, index) => {
 					const realIndex = startIndex + index;
 					return (
-						<div key={realIndex} style={{ height: itemHeight }}>
+						<div
+							key={realIndex}
+							ref={(node) => {
+								if (node) {
+									const rect = node.getBoundingClientRect();
+									updateItemHeight(realIndex, rect.height);
+								}
+							}}
+						>
 							{renderItem(item, realIndex)}
 						</div>
 					);

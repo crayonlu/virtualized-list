@@ -19,3 +19,10 @@ export interface VirtualizedListProps<T> {
 	onEndReached?: () => void;
 	onEndReachedThreshold?: number;
 }
+
+export interface PositionCache {
+	index: number;
+	height: number;
+	top: number;
+	bottom: number;
+}
