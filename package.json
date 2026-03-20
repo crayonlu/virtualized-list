@@ -3,6 +3,14 @@
 	"version": "0.1.0",
 	"description": "Lightweight React virtualized list with dynamic height support",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/crayonlu/virtualized-list.git"
+	},
+	"homepage": "https://github.com/crayonlu/virtualized-list#readme",
+	"bugs": {
+		"url": "https://github.com/crayonlu/virtualized-list/issues"
+	},
 	"type": "module",
 	"main": "dist/index.cjs",
 	"module": "dist/index.js",
