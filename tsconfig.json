@@ -14,6 +14,12 @@
 		"verbatimModuleSyntax": true,
 		"noEmit": true,
 
+		// Path aliases
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+
 		// Best practices
 		"strict": true,
 		"skipLibCheck": true,
@@ -24,7 +30,7 @@
 		// Some stricter flags (disabled by default)
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
-		"noPropertyAccessFromIndexSignature": false,
+		"noPropertyAccessFromIndexSignature": false
 	},
 	"include": ["src/**/*", "test/**/*", "demo/**/*"],
 	"exclude": ["node_modules", "dist"]
