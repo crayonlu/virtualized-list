@@ -48,6 +48,9 @@ export function useDynamicHeights(estimatedHeight: number, dataLength: number) {
 
 	const getStartIndex = (scrollTop: number) => {
 		const positions = positionsRef.current;
+		if (positions.length === 0) return 0;
+		const maxScrollTop = positions[positions.length - 1]!.bottom;
+		if (scrollTop >= maxScrollTop) return positions.length - 1;
 		let left = 0;
 		let right = positions.length - 1;
 		let startIndex = 0;

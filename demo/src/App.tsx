@@ -23,7 +23,7 @@ function App() {
 		>
 			<VirtualizedList
 				data={mockData}
-				itemHeight={50}
+				itemHeight={100}
 				style={{
 					height: 500,
 					width: 350,
