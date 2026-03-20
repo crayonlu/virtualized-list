@@ -1,14 +1,22 @@
 {
-	"name": "virtualized-list",
+	"name": "lite-virtualized-list",
+	"version": "0.1.0",
+	"description": "Lightweight React virtualized list with dynamic height support",
+	"license": "MIT",
 	"type": "module",
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/index.mjs",
-			"require": "./dist/index.js"
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
 		}
 	},
 	"scripts": {
@@ -16,8 +24,15 @@
 		"format": "biome format --write .",
 		"check": "biome check .",
 		"check:write": "biome check --write .",
-		"build": "tsup"
+		"build": "tsup",
+		"prepublishOnly": "npm run build"
 	},
+	"keywords": [
+		"react",
+		"virtualized-list",
+		"infinite-scroll",
+		"performance"
+	],
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.8",
 		"@types/bun": "latest",
