@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { VirtualizedListProps } from "@/types";
 
 export function VirtualizedList<T>(props: VirtualizedListProps<T>) {
@@ -15,11 +15,27 @@ export function VirtualizedList<T>(props: VirtualizedListProps<T>) {
 	} = props;
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [scrollTop, setScrollTop] = useState(0);
+	const [containerHeight, setContainerHeight] = useState(0);
 	const lastNotifiedDataLength = useRef(0);
+
+	useEffect(()=>{
+		const containerElement = containerRef.current;
+    if (!containerElement) return;
+		const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerHeight(entry.contentRect.height);
+      }
+    });
+		observer.observe(containerElement);
+
+		return () => {
+      observer.disconnect();
+    };
+	}, [])
+
 	const dataLength = data.length;
 	const totalHeight = dataLength * itemHeight;
 
-	const containerHeight = containerRef.current?.clientHeight || 0;
 	const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
 	const endIndex = Math.min(
 		dataLength - 1,
