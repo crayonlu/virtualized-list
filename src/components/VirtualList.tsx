@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { ListItem } from "@/components/ListItem";
 import { useDynamicHeights } from "@/hooks/useDynamicHeights";
 import type { VirtualizedListProps, VirtualizedListRef } from "@/types";
-import { ListItem } from "@/components/ListItem";
 
 const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<unknown>>(
 	function VirtualizedListInner(props, ref) {

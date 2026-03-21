@@ -1,11 +1,11 @@
-import { useEffect, useRef, memo } from "react";
+import { memo, useEffect, useRef } from "react";
 
 interface ListItemProps<T> {
 	item: T;
 	realIndex: number;
 	renderItem: (item: T, index: number) => React.ReactNode;
 	updateItemHeight: (index: number, height: number) => void;
-	extraData?: any;
+	extraData?: unknown;
 }
 
 const ListItemComponent = <T,>({

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useReducer } from "react";
+import { useMemo, useReducer, useRef } from "react";
 import type { PositionCache } from "@/types";
 
 export function useDynamicHeights(estimatedHeight: number, dataLength: number) {
