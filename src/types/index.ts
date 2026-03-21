@@ -26,27 +26,11 @@ export interface PositionCache {
 	bottom: number;
 }
 
-/**
- * Options for programmatic list scrolling.
- */
-export interface ScrollToIndexOptions {
-	/**
-	 * Native scroll animation behavior.
-	 *
-	 * - `"auto"`: jump to target position immediately
-	 * - `"smooth"`: animate to target position smoothly
-	 *
-	 * @defaultValue "auto"
-	 */
-	behavior?: ScrollBehavior;
-}
-
 export interface VirtualizedListRef {
 	/**
 	 * Scrolls the list to a specific item index.
 	 *
 	 * @param index zero-based item index
-	 * @param options scrolling behavior options
 	 */
-	scrollToIndex: (index: number, options?: ScrollToIndexOptions) => void;
+	scrollToIndex: (index: number) => void;
 }

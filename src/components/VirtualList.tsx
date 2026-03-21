@@ -25,6 +25,7 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 		);
 		const containerRef = useRef<HTMLDivElement>(null);
 		const trackingTargetIndexRef = useRef<number | null>(null);
+		const isProgrammaticScrollRef = useRef(false);
 		const [scrollTop, setScrollTop] = useState(0);
 		const [containerHeight, setContainerHeight] = useState(0);
 		const lastNotifiedDataLength = useRef(0);
@@ -39,28 +40,33 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 			});
 			observer.observe(containerElement);
 
+			const handleInteraction = () => {
+				trackingTargetIndexRef.current = null;
+			};
+			containerElement.addEventListener("wheel", handleInteraction, { passive: true });
+			containerElement.addEventListener("touchstart", handleInteraction, { passive: true });
+			containerElement.addEventListener("mousedown", handleInteraction, { passive: true });
+
 			return () => {
 				observer.disconnect();
+				containerElement.removeEventListener("wheel", handleInteraction);
+				containerElement.removeEventListener("touchstart", handleInteraction);
+				containerElement.removeEventListener("mousedown", handleInteraction);
 			};
 		}, []);
-
 		useImperativeHandle(
 			ref,
 			() => ({
-				scrollToIndex: (index: number, options?: { behavior?: ScrollBehavior }) => {
+				scrollToIndex: (index: number) => {
 					const validIndex = Math.max(0, Math.min(index, data.length - 1));
 					const container = containerRef.current;
 					if (!container) return;
 
-					const behavior = options?.behavior ?? "auto";
-					if (behavior === "smooth") {
-						trackingTargetIndexRef.current = null;
-						container.scrollTo({ top: getOffsetTop(validIndex), behavior });
-						return;
-					}
-
+					const targetTop = getOffsetTop(validIndex);
 					trackingTargetIndexRef.current = validIndex;
-					container.scrollTop = getOffsetTop(validIndex);
+					isProgrammaticScrollRef.current = true;
+					container.scrollTop = targetTop;
+					setScrollTop(targetTop);
 				},
 			}),
 			[data.length, getOffsetTop]
@@ -71,9 +77,14 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 			if (targetIndex === null || !container) return;
 			const targetTop = getOffsetTop(targetIndex);
 			if (Math.abs(container.scrollTop - targetTop) > 1) {
+				isProgrammaticScrollRef.current = true;
 				container.scrollTop = targetTop;
+				setScrollTop(targetTop);
 			} else {
-				trackingTargetIndexRef.current = null;
+				const timer = setTimeout(() => {
+					if (trackingTargetIndexRef.current === targetIndex) trackingTargetIndexRef.current = null;
+				}, 10);
+				return () => clearTimeout(timer);
 			}
 		});
 
@@ -95,9 +106,12 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 			const clientHeight = target.clientHeight;
 			const scrollHeight = target.scrollHeight;
 
-			if (rafId.current !== null) {
-				cancelAnimationFrame(rafId.current);
+			if (isProgrammaticScrollRef.current) {
+				isProgrammaticScrollRef.current = false;
+				return;
 			}
+
+			if (rafId.current !== null) cancelAnimationFrame(rafId.current);
 
 			rafId.current = requestAnimationFrame(() => {
 				setScrollTop(currentScrollTop);
@@ -121,7 +135,7 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 			<div
 				ref={containerRef}
 				className={className}
-				style={{ ...style, overflowY: "auto", position: "relative" }}
+				style={{ ...style, overflowY: "auto", position: "relative", overflowAnchor: "none" }}
 				onScroll={handleScroll}
 			>
 				{/* ghost */}

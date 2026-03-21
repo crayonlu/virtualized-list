@@ -7,7 +7,6 @@ A React component library for rendering large lists efficiently using virtualiza
 - **Virtualization** - Only renders visible items for maximum performance
 - **Dynamic Heights** - Automatically handles items with variable heights
 - **TypeScript** - Full TypeScript support with generic types
-- **Smooth Scrolling** - GPU-accelerated scrolling with RAF throttling
 - **Overscan** - Configurable overscan for smooth scrolling experience
 - **Memoization** - Fine-grained memoization prevents unnecessary re-renders
 
@@ -46,16 +45,9 @@ Use a component ref to call imperative scrolling methods:
 
 | Method | Type | Description |
 |------|------|-------------|
-| `scrollToIndex` | `(index: number, options?: { behavior?: ScrollBehavior }) => void` | Scroll to a zero-based item index |
-
-`scrollToIndex` options:
-
-| Option | Type | Default | Description |
-|------|------|---------|-------------|
-| `behavior` | `'auto' \| 'smooth'` | `'auto'` | Scroll animation behavior. Use `'smooth'` for animated scrolling |
-
+| `scrollToIndex` | `(index: number) => void` | Scroll to a zero-based item index |
 Example:
 
 ```tsx
-listRef.current?.scrollToIndex(500, { behavior: "smooth" });
+listRef.current?.scrollToIndex(500);
 ```
