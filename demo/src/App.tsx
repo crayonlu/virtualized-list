@@ -1,4 +1,4 @@
-import { VirtualizedList } from "../../src/index";
+import { VirtualizedList } from "lite-virtualized-list";
 import "./App.css";
 
 const mockData = new Array(1000).fill(0).map((_, i) => {
