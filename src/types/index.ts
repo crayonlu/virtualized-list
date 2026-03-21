@@ -4,6 +4,7 @@ import type { CSSProperties, ReactNode, UIEvent } from "react";
 export interface VirtualizedListProps<T> {
 	data: T[];
 	itemHeight: number;
+	initialItemCount?: number;
 
 	renderItem: (item: T, index: number) => ReactNode;
 	keyExtractor?: (item: T, index: number) => React.Key;
@@ -15,7 +16,7 @@ export interface VirtualizedListProps<T> {
 	onEndReached?: () => void;
 	onEndReachedThreshold?: number;
 
-	extraData?: any;
+	extraData?: unknown;
 }
 
 export interface PositionCache {

@@ -35,11 +35,11 @@ see [demo](./demo)
 | `overscan` | `number` | - | `5` | Number of extra items to render outside viewport |
 | `className` | `string` | - | `''` | CSS class for container |
 | `style` | `CSSProperties` | - | `{}` | Inline styles for container |
-| `extraData` | `any` | - | - | Extra data to trigger re-renders |
+| `extraData` | `unknown` | - | - | Extra data to trigger re-renders |
 | `onScroll` | `(e: UIEvent) => void` | - | - | Scroll event callback |
 | `onEndReached` | `() => void` | - | - | Callback when scrolled to end |
 | `onEndReachedThreshold` | `number` | - | `100` | Threshold in pixels from end to trigger `onEndReached` |
-
+| `initialItemCount` | `number` | - | - | Number of items to render on initial mount (for better perceived performance and SSR) |
 ### Ref Methods
 
 Use a component ref to call imperative scrolling methods:

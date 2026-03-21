@@ -8,6 +8,7 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 		const {
 			data,
 			itemHeight,
+			initialItemCount,
 			renderItem,
 			keyExtractor,
 			overscan = 5,
@@ -79,11 +80,13 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 		const dataLength = data.length;
 		const totalHeight = getTotalHeight();
 
+		const isInitialRender = containerHeight === 0;
+
 		const startIndex = Math.max(0, getStartIndex(scrollTop) - overscan);
-		const endIndex = Math.min(
-			dataLength - 1,
-			getStartIndex(scrollTop + containerHeight) + overscan
-		);
+		const endIndex =
+			isInitialRender && initialItemCount
+				? initialItemCount - 1
+				: Math.min(dataLength - 1, getStartIndex(scrollTop + containerHeight) + overscan);
 		const offsetY = getOffsetTop(startIndex);
 		const visibleData = data.slice(startIndex, endIndex + 1);
 		const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
