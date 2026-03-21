@@ -39,3 +39,23 @@ see [demo](./demo)
 | `onScroll` | `(e: UIEvent) => void` | - | - | Scroll event callback |
 | `onEndReached` | `() => void` | - | - | Callback when scrolled to end |
 | `onEndReachedThreshold` | `number` | - | `100` | Threshold in pixels from end to trigger `onEndReached` |
+
+### Ref Methods
+
+Use a component ref to call imperative scrolling methods:
+
+| Method | Type | Description |
+|------|------|-------------|
+| `scrollToIndex` | `(index: number, options?: { behavior?: ScrollBehavior }) => void` | Scroll to a zero-based item index |
+
+`scrollToIndex` options:
+
+| Option | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior` | `'auto' \| 'smooth'` | `'auto'` | Scroll animation behavior. Use `'smooth'` for animated scrolling |
+
+Example:
+
+```tsx
+listRef.current?.scrollToIndex(500, { behavior: "smooth" });
+```
