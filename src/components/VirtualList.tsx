@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { ListItem } from "@/components/ListItem";
 import { useDynamicHeights } from "@/hooks/useDynamicHeights";
 import type { VirtualizedListProps, VirtualizedListRef } from "@/types";
@@ -71,7 +71,7 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 			}),
 			[data.length, getOffsetTop]
 		);
-		useEffect(() => {
+		useLayoutEffect(() => {
 			const targetIndex = trackingTargetIndexRef.current;
 			const container = containerRef.current;
 			if (targetIndex === null || !container) return;
@@ -80,11 +80,6 @@ const VirtualizedListBase = forwardRef<VirtualizedListRef, VirtualizedListProps<
 				isProgrammaticScrollRef.current = true;
 				container.scrollTop = targetTop;
 				setScrollTop(targetTop);
-			} else {
-				const timer = setTimeout(() => {
-					if (trackingTargetIndexRef.current === targetIndex) trackingTargetIndexRef.current = null;
-				}, 10);
-				return () => clearTimeout(timer);
 			}
 		});
 
